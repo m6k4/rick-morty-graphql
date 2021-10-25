@@ -1,22 +1,44 @@
 <template>
   <div class="CharacterList">
-    HELLO
+    <pre>
+      {{ characters }}
+    </pre>
+    <el-pagination background layout="prev, pager, next"
+                   hide-on-single-page
+                   :total="infoCount"
+                   :page-size="pageSize"
+                   @current-change="changePage"
+    />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import useCharacter from '../composable/useCharacter';
+import { FilterCharacter } from '@/types/types';
 
 export default defineComponent({
   setup() {
     const {
-      allCharacters,
+      characters,
+      info,
       fetch,
     } = useCharacter();
 
-    fetch([1]);
+    const pageSize = 20;
+    const filters: FilterCharacter = {} as FilterCharacter;
 
-    console.log(allCharacters.value, 'TEST');
+    fetch(1, filters);
+
+    function changePage(page: number): void {
+      fetch(page, filters);
+    }
+
+    return {
+      pageSize,
+      characters,
+      infoCount: computed(() => info.value?.getCount()),
+      changePage,
+    };
   },
 });
 </script>

@@ -1,41 +1,50 @@
 import axios from 'axios';
 import { computed, ref } from 'vue';
-import { CharacterDTO } from '@/types/types';
+import {
+  CharacterDTO, FilterCharacter, GetCharactersResponse,
+} from '@/types/types';
 import Character from '../types/Character';
+import Info from '../types/Info';
 
 export default function useCharacter() {
-  const allCharacters = ref<Array<Character>>([]);
+  const characters = ref<Array<Character>>([]);
+  const info = ref<Info>();
 
-  async function fetch(ids: Array<number>): Promise<void> {
-    console.log(ids);
-    const result = await axios({
-      method: 'POST',
-      url: 'https://rickandmortyapi.com/graphql',
-      data: {
-        query: `
-            {
-              charactersByIds(ids: [1, 2]) {
-                id
-                name
-                image
-                status
-                gender
-                species
-                }
-            }
-        `,
+  async function fetch(page: number, filters: FilterCharacter): Promise<void> {
+    await axios.post<GetCharactersResponse>(process.env.VUE_APP_API_URL, {
+      query: `query getCharacters($page: Int!, $filter: FilterCharacter) {
+        characters(page: $page, filter: $filter) {
+          info {
+            count
+            pages
+            next
+            prev
+          }
+          results {
+            id
+            name
+            image
+            status
+            gender
+            species
+          }
+        }
+      }`,
+      variables: {
+        page,
+        filter: filters,
       },
-    }).then((response: any) => {
-      console.log(response);
-      allCharacters.value = response.data.data.charactersByIds.map(
+    }).then((response) => {
+      characters.value = response.data.data.characters.results.map(
         (dto: CharacterDTO) => Character.fromDTO(dto),
       );
+      info.value = Info.fromDTO(response.data.data.characters.info);
     });
-    console.log(allCharacters.value, 'RESULT');
   }
 
   return {
-    allCharacters: computed(() => allCharacters.value),
+    characters: computed(() => characters.value),
+    info: computed(() => info.value),
     fetch,
   };
 }
