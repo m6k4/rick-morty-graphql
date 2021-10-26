@@ -46,9 +46,6 @@ export default defineComponent({
       default: () => ({}),
     },
   },
-  setup(props) {
-    console.log(props, 'TEST');
-  },
 });
 </script>
 <style lang="sass" scoped>

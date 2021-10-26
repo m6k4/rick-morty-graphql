@@ -5,6 +5,7 @@
         v-for="character in characters"
         :key="character.getId()"
         :character="character"
+        @click="toggleModal"
       />
     </div>
     <div class="CharacterList__pagination">
@@ -14,20 +15,28 @@
         @current-change="changePage"
       />
     </div>
+    <CharacterDescriptionModal
+      v-if="isModalVisible"
+      @closeModal="toggleModal"
+    />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
+import {
+  defineComponent, computed, ref, Ref,
+} from 'vue';
 import useCharacter from '../composable/useCharacter';
 import { FilterCharacter } from '@/types/types';
 import ThePagination from '../../common/ThePagination.vue';
 import CharacterListItem from './CharacterListItem.vue';
+import CharacterDescriptionModal from './CharacterDescriptionModal.vue';
 
 export default defineComponent({
   name: 'CharacterList',
   components: {
     ThePagination,
     CharacterListItem,
+    CharacterDescriptionModal,
   },
   setup() {
     const {
@@ -36,6 +45,7 @@ export default defineComponent({
       fetch,
     } = useCharacter();
 
+    const isModalVisible: Ref<boolean> = ref(false);
     const pageSize = 20;
     const filters: FilterCharacter = {} as FilterCharacter;
 
@@ -45,10 +55,15 @@ export default defineComponent({
       fetch(page, filters);
     }
 
+    function toggleModal(): void {
+      isModalVisible.value = !isModalVisible.value;
+    }
     return {
+      isModalVisible,
       pageSize,
       characters,
       infoCount: computed(() => info.value?.getCount()),
+      toggleModal,
       changePage,
     };
   },
