@@ -1,22 +1,34 @@
 <template>
   <div class="CharacterList">
-    <pre>
-      {{ characters }}
-    </pre>
-    <el-pagination background layout="prev, pager, next"
-                   hide-on-single-page
-                   :total="infoCount"
-                   :page-size="pageSize"
-                   @current-change="changePage"
-    />
+    <div class="CharacterList__list">
+      <CharacterListItem
+        v-for="character in characters"
+        :key="character.getId()"
+        :character="character"
+      />
+    </div>
+    <div class="CharacterList__pagination">
+      <ThePagination
+        :total="infoCount"
+        :page-size="pageSize"
+        @current-change="changePage"
+      />
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import useCharacter from '../composable/useCharacter';
 import { FilterCharacter } from '@/types/types';
+import ThePagination from '../../common/ThePagination.vue';
+import CharacterListItem from './CharacterListItem.vue';
 
 export default defineComponent({
+  name: 'CharacterList',
+  components: {
+    ThePagination,
+    CharacterListItem,
+  },
   setup() {
     const {
       characters,
@@ -42,3 +54,18 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="sass" scoped>
+.CharacterList
+  text-align: center
+
+  &__list
+    display: flex
+    flex-wrap: wrap
+    justify-content: flex-start
+    column-gap: 20px
+    row-gap: 20px
+
+  &__pagination
+    margin-top: auto
+
+</style>
