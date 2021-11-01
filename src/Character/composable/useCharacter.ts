@@ -18,7 +18,7 @@ export default function useCharacter(): {
 
   async function fetch(page: number, filters: FilterCharacter): Promise<void> {
     isLoading.value = true;
-    await axios.post<GetCharactersResponse>(process.env.VUE_APP_API_URL, {
+    await axios.post<GetCharactersResponse>('https://rickandmortyapi.com/graphql', {
       query: `query getCharacters($page: Int!, $filter: FilterCharacter) {
         characters(page: $page, filter: $filter) {
           info {
