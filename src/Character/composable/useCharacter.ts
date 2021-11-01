@@ -8,13 +8,16 @@ import Info from '../types/Info';
 
 export default function useCharacter(): {
   characters: Ref<Array<Character>>,
+  isLoading: Ref<boolean>,
   info: Ref<Info>,
   fetch: (page: number, filters: FilterCharacter) => Promise<void>,
   } {
   const characters = ref<Array<Character>>([]);
   const info = ref<Info>();
+  const isLoading = ref<boolean>(false);
 
   async function fetch(page: number, filters: FilterCharacter): Promise<void> {
+    isLoading.value = true;
     await axios.post<GetCharactersResponse>(process.env.VUE_APP_API_URL, {
       query: `query getCharacters($page: Int!, $filter: FilterCharacter) {
         characters(page: $page, filter: $filter) {
@@ -44,10 +47,12 @@ export default function useCharacter(): {
       );
       info.value = Info.fromDTO(response.data.data.characters.info);
     });
+    isLoading.value = false;
   }
 
   return {
     characters: computed(() => characters.value as Character[]),
+    isLoading: computed(() => isLoading.value),
     info: computed(() => info.value),
     fetch,
   };

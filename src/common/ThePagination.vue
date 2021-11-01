@@ -1,10 +1,11 @@
 <template>
   <div class="ThePagination">
     <el-pagination background layout="prev, pager, next"
-                   hide-on-single-page
-                   :total="total"
-                   :page-size="pageSize"
-                   @current-change="$emit('current-change', $event)"
+                  :current-page="page"
+                  hide-on-single-page
+                  :total="total"
+                  :page-size="pageSize"
+                  @current-change="$emit('current-change', $event)"
     />
   </div>
 </template>
@@ -20,6 +21,10 @@ export default defineComponent({
       default: 0,
     },
     pageSize: {
+      type: Number,
+      default: 0,
+    },
+    page: {
       type: Number,
       default: 0,
     },

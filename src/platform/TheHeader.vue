@@ -2,7 +2,7 @@
   <header class="TheHeader">
     <img
         class="TheHeader__img"
-        src="@/assets/images/logo.png"
+        src="@/assets/images/header.png"
     />
     <slot name="header-content"/>
   </header>
@@ -24,9 +24,10 @@ export default defineComponent({
   width: 100%
   display: flex
   height: 80px
+  column-gap: 20%
 
   &__img
-    height: 80px
+    height: 150px
     margin: 0 60px 10px
 
 </style>

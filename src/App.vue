@@ -45,8 +45,9 @@ body
 
 .AppView
   width: 100%
-  height: 100%
+  height: 100vh
 
   &__content
     position: relative
+    height: 100%
 </style>

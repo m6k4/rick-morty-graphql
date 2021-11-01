@@ -58,7 +58,7 @@ export default defineComponent({
   border-radius: 16px
   background: darken($card-color, 5%)
   border: 5px solid $main-color
-  box-shadow: 0 0 0.6em lighten(#efda53, 5%)
+  box-shadow: 0px 0px 8px 3px lighten(#4FA639, 5%)
 
   &__img
     width: 100%

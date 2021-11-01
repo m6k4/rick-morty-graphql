@@ -16,6 +16,16 @@ export interface FilterCharacter {
     gender: string;
 }
 
+export enum FilterType {
+    NAME = 'name',
+    ID = 'identifier',
+    EPISODE = 'episode'
+}
+export interface FilterOption {
+    type: FilterType,
+    value: string
+}
+
 export interface InfoDTO {
     count: number;
     pages: number;
