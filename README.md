@@ -1,5 +1,7 @@
 # rick-morty-graphql
 
+Demo: https://vigorous-lumiere-1f3167.netlify.app/
+
 ## Project setup
 ```
 npm install
